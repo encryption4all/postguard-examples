@@ -1,128 +1,66 @@
-import type { ISealOptions } from '@e4a/pg-wasm';
+import { PostGuard } from '@e4a/postguard-js';
 import type { CitizenRecipient, OrganisationRecipient } from '$lib/types';
-import { PKG_URL, UPLOAD_CHUNK_SIZE } from '$lib/config';
-import Chunker, { withTransform } from './chunker';
-import { createFileReadable, getFileStoreStream } from './file-provider';
+import { PKG_URL, CRYPTIFY_URL } from '$lib/config';
 
-// Fetch the master public key from PKG
-async function fetchMPK(): Promise<unknown> {
-	const response = await fetch(`${PKG_URL}/v2/parameters`);
-	if (!response.ok) throw new Error(`Failed to fetch PKG parameters: ${response.status}`);
-	const json = await response.json();
-	return json.publicKey;
-}
+const pg = new PostGuard({ pkgUrl: PKG_URL, cryptifyUrl: CRYPTIFY_URL });
 
-// Fetch signing keys using API key auth (no Yivi needed)
-async function fetchSigningKeys(
-	apiKey: string
-): Promise<{ pubSignKey: unknown; privSignKey?: unknown }> {
-	const response = await fetch(`${PKG_URL}/v2/irma/sign/key`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${apiKey}`
-		},
-		body: JSON.stringify({
-			pubSignId: [{ t: 'pbdf.sidn-pbdf.email.email' }]
-		})
-	});
-	if (!response.ok) {
-		const text = await response.text();
-		throw new Error(`Failed to fetch signing keys: ${response.status} ${text}`);
-	}
-	return response.json();
-}
+export { pg };
 
-function extractDomain(email: string): string {
-	return email.split('@')[1] || '';
-}
-
-export interface EncryptAndSendOptions {
+export interface EncryptOptions {
 	files: File[];
 	citizen: CitizenRecipient;
 	organisation: OrganisationRecipient;
 	apiKey: string;
-	message: string | null;
 	onProgress?: (percentage: number) => void;
 	abortController?: AbortController;
 }
 
-export async function encryptAndSend(options: EncryptAndSendOptions): Promise<void> {
-	const {
+export interface EncryptAndSendOptions extends EncryptOptions {
+	message: string | null;
+}
+
+/** Encrypt, upload to Cryptify, and have Cryptify send the email to recipients. */
+export async function encryptAndSend(options: EncryptAndSendOptions): Promise<string> {
+	const { files, citizen, organisation, apiKey, message, onProgress, abortController } = options;
+
+	const sealed = pg.encrypt({
 		files,
-		citizen,
-		organisation,
-		apiKey,
-		message,
+		recipients: [
+			pg.recipient.email(citizen.email), 
+			pg.recipient.emailDomain(organisation.email)
+		],
+		sign: pg.sign.apiKey(apiKey),
 		onProgress,
-		abortController = new AbortController()
-	} = options;
+		signal: abortController?.signal
+	});
 
-	// Fetch MPK and signing keys in parallel
-	const [mpk, signingKeys] = await Promise.all([fetchMPK(), fetchSigningKeys(apiKey)]);
-
-	// Build encryption policy
-	const ts = Math.round(Date.now() / 1000);
-	const policy: Record<string, { ts: number; con: { t: string; v?: string }[] }> = {};
-
-	// Citizen: must prove exact email address
-	policy[citizen.email] = {
-		ts,
-		con: [{ t: 'pbdf.sidn-pbdf.email.email', v: citizen.email }]
-	};
-
-	// Organisation: must prove an email at the correct domain
-	policy[organisation.email] = {
-		ts,
-		con: [{ t: 'pbdf.sidn-pbdf.email.domain', v: extractDomain(organisation.email) }]
-	};
-
-	const sealOptions: ISealOptions = {
-		policy,
-		pubSignKey: signingKeys.pubSignKey as ISealOptions['pubSignKey']
-	};
-	if (signingKeys.privSignKey) {
-		sealOptions.privSignKey = signingKeys.privSignKey as ISealOptions['pubSignKey'];
-	}
-
-	// Import pg-wasm and Conflux dynamically (client-side only, WASM)
-	const { sealStream } = await import('@e4a/pg-wasm');
-	const { Writer: ConfluxWriter } = await import('@transcend-io/conflux');
-
-	// Create ZIP stream from files
-	const zipTransform = new ConfluxWriter();
-	const readable = zipTransform.readable as ReadableStream;
-	const writable = zipTransform.writable;
-	const writer = writable.getWriter();
-
-	for (const f of files) {
-		const s = createFileReadable(f);
-		writer.write({ name: f.name, lastModified: f.lastModified, stream: () => s });
-	}
-	writer.close();
-
-	// Set up upload stream with chunking
-	const uploadChunker = new Chunker(UPLOAD_CHUNK_SIZE);
-	const recipientEmails = [citizen.email, organisation.email].join(', ');
-	const totalSize = files.reduce((a, f) => a + f.size, 0);
-
-	const fileStream = getFileStoreStream(
-		abortController,
-		recipientEmails,
-		message,
-		(uploaded, last) => {
-			if (onProgress) {
-				const pct = totalSize > 0 ? Math.min(100, Math.round((uploaded / totalSize) * 100)) : 0;
-				onProgress(last ? 100 : pct);
-			}
+	const result = await sealed.upload({
+		notify: {
+			message: message ?? undefined,
+			language: 'EN',
+			confirmToSender: false
 		}
-	);
+	});
 
-	// Encrypt: ZIP → sealStream → chunker → upload
-	await sealStream(
-		mpk,
-		sealOptions,
-		readable,
-		withTransform(fileStream, uploadChunker, abortController.signal)
-	);
+	return result.uuid;
+}
+
+/** Encrypt and upload to Cryptify without sending email. Returns the UUID. */
+export async function encryptAndUpload(options: EncryptOptions): Promise<string> {
+	const { files, citizen, organisation, apiKey, onProgress, abortController } = options;
+
+	const sealed = pg.encrypt({
+		files,
+		recipients: [
+			pg.recipient.email(citizen.email), 
+			pg.recipient.emailDomain(organisation.email)
+		],
+		sign: pg.sign.apiKey(apiKey),
+		onProgress,
+		signal: abortController?.signal
+	});
+
+	const result = await sealed.upload();
+
+	return result.uuid;
 }
