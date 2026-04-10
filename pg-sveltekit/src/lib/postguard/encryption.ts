@@ -1,4 +1,4 @@
-import { PostGuard } from '@e4a/postguard-js';
+import { PostGuard } from '@e4a/pg-js';
 import type { CitizenRecipient, OrganisationRecipient } from '$lib/types';
 import { PKG_URL, CRYPTIFY_URL } from '$lib/config';
 
