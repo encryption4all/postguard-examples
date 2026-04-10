@@ -10,9 +10,9 @@
   <!-- Reference the SDK via local path. Adjust this to your postguard-dotnet checkout. -->
   <!-- Once published to NuGet, replace with: <PackageReference Include="E4A.PostGuard" Version="0.1.0" /> -->
   <ItemGroup>
-    <ProjectReference Include="$(PG_DOTNET_SDK)src/E4A.PostGuard/E4A.PostGuard.csproj"
+    <ProjectReference Include="$(PG_DOTNET_SDK)src/E4A.PostGuard.csproj"
                       Condition="'$(PG_DOTNET_SDK)' != ''" />
-    <ProjectReference Include="../../postguard-dotnet/src/E4A.PostGuard/E4A.PostGuard.csproj"
+    <ProjectReference Include="../../postguard-dotnet/src/E4A.PostGuard.csproj"
                       Condition="'$(PG_DOTNET_SDK)' == ''" />
   </ItemGroup>
 
