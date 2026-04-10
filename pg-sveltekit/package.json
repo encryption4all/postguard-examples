@@ -35,6 +35,6 @@
 		"vite-plugin-wasm": "^3.6.0"
 	},
 	"dependencies": {
-		"@e4a/postguard-js": "file:../../postguard-js"
+		"@e4a/pg-js": "^0.7.0"
 	}
 }
