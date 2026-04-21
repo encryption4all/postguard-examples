@@ -4,10 +4,11 @@
 
 Example applications demonstrating PostGuard integration. Contains reference implementations for developers building on PostGuard. Code snippets in docs.postguard.eu come from this repo.
 
-There are two sub-projects:
+There are three sub-projects:
 
 - **pg-sveltekit/** -- SvelteKit web app using the `@e4a/pg-js` SDK.
 - **pg-dotnet/** -- .NET console app using the `postguard-dotnet` SDK.
+- **pg-manual/** -- Manual encryption/decryption using the `@e4a/pg-wasm` library directly.
 
 ## Development
 

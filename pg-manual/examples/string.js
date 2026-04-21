@@ -1,7 +1,7 @@
 import { KeySorts, fetchKey, PKG_URL } from './utils'
 
 // This example uses demo credentials.
-// Anyone get retrieve an instance with custom data at the following URL:
+// Anyone can retrieve an instance with custom data at the following URL:
 // https://privacybydesign.foundation/attribute-index/en/irma-demo.gemeente.personalData.html
 
 const modPromise = import('@e4a/pg-wasm')
@@ -56,7 +56,7 @@ async function encrypt() {
         ct = await seal(mpk, sealOptions, encoded)
         const tEncrypt = performance.now() - t0
 
-        console.log(`tEncrypt ${tEncrypt}$ ms`)
+        console.log(`tEncrypt ${tEncrypt} ms`)
         console.log('ct: ', ct)
 
         const outputEl = document.getElementById('ciphertext')
@@ -96,7 +96,7 @@ async function decrypt() {
 
         const tDecrypt = performance.now() - t0
 
-        console.log(`tDecrypt ${tDecrypt}$ ms`)
+        console.log(`tDecrypt ${tDecrypt} ms`)
 
         const original = new TextDecoder().decode(plain)
         document.getElementById('original').textContent = original

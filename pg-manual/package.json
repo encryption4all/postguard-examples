@@ -3,7 +3,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/encryption4all/pg-example.git"
+    "url": "https://github.com/encryption4all/postguard-examples.git"
   },
   "devDependencies": {
     "@privacybydesign/yivi-client": "^0.1.2",

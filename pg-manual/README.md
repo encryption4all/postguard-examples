@@ -9,11 +9,11 @@ files, see [examples/file.js](./examples/file.js).
 Install the dependencies using:
 
 ```
-yarn
+npm install
 ```
 
 Then, run a development setup using:
 
 ```
-yarn dev
+npm run dev
 ```

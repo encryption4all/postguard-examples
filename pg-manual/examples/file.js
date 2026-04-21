@@ -7,7 +7,7 @@ if (window.WritableStream == undefined) {
 }
 
 // This example uses a demo credential.
-// Anyone get retrieve an instance with custom data at the following URL:
+// Anyone can retrieve an instance with custom data at the following URL:
 // https://privacybydesign.foundation/attribute-index/en/irma-demo.gemeente.personalData.html
 
 const modPromise = import('@e4a/pg-wasm')
@@ -26,23 +26,22 @@ async function encryptFile(readable, writable) {
     }
 
 
-// We provide the policies which we want to sign with.
+    // We provide the policies which we want to sign with.
 
-// This policy is visible to everyone.
-const pubSignId = [
-  { t: "irma-demo.gemeente.personalData.fullname", v: "Alice" },
-];
+    // This policy is visible to everyone.
+    const pubSignId = [{ t: 'irma-demo.gemeente.personalData.fullname', v: 'Alice' }]
 
-// This policy is only visible to recipients.
-const privSignId = [{ t: "irma-demo.gemeente.personalData.bsn", v: "1234" }];
+    // This policy is only visible to recipients.
+    const privSignId = [{ t: 'irma-demo.gemeente.personalData.bsn', v: '1234' }]
 
-// We retrieve keys for these policies.
-let { pubSignKey, privSignKey } = await fetchKey(
-  KeySorts.Signing,
-  { con: [...pubSignId, ...privSignId] },
-  undefined,
-  { pubSignId, privSignId }
-);    console.log('got public signing key for Alice: ', pubSignKey)
+    // We retrieve keys for these policies.
+    let { pubSignKey, privSignKey } = await fetchKey(
+        KeySorts.Signing,
+        { con: [...pubSignId, ...privSignId] },
+        undefined,
+        { pubSignId, privSignId }
+    )
+    console.log('got public signing key for Alice: ', pubSignKey)
     console.log('got private signing key for Alice: ', privSignKey)
 
     const sealOptions = {
@@ -73,7 +72,7 @@ async function decryptFile(readable, writable) {
 
     const keyRequest = {
         con: [{ t: 'irma-demo.sidn-pbdf.email.email', v: 'bob@example.com' }],
-        validity: 600, // 1 minute
+        validity: 600, // 10 minutes
     }
 
     const timestamp = recipients.get('Bob').ts
@@ -103,7 +102,7 @@ const listener = async (event) => {
 
     const t = performance.now() - t0
 
-    console.log(`operation took ${t}$ ms`)
+    console.log(`operation took ${t} ms`)
     console.log(`average MB/s: ${inFile.size / (1000 * t)}`)
 }
 
