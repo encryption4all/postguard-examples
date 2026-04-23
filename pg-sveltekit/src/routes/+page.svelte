@@ -205,7 +205,7 @@
 	<section>
 		<h2>4. API key</h2>
 		<p class="hint">PostGuard API key for sender authentication.</p>
-		<input type="text" bind:value={apiKey} placeholder="PG-API-1a2b3c4d5e6f7g8h" />
+		<input type="text" bind:value={apiKey} placeholder="PG-1a2b3c4d5e6f7g8h" />
 	</section>
 
 	{#if deliveryMode === 'send-email'}

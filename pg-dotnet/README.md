@@ -42,7 +42,7 @@ Example .NET console app demonstrating how to use the [postguard-dotnet](https:/
 ## Run
 
 ```bash
-export PG_API_KEY="PG-API-your-key-here"
+export PG_API_KEY="PG-your-key-here"
 dotnet run
 ```
 
