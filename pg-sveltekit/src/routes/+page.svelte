@@ -144,9 +144,7 @@
 					Use this UUID to build your own download link and send it however you like (your own email
 					system, chat, etc). Recipients can decrypt at:
 				</p>
-				<code class="download-url"
-					>https://postguard.eu/download?uuid={resultUuid}</code
-				>
+				<code class="download-url">https://postguard.eu/download?uuid={resultUuid}</code>
 			</div>
 		{/if}
 		<button class="primary-btn" onclick={handleReset}>Start over</button>

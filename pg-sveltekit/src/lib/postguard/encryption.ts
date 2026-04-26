@@ -25,10 +25,7 @@ export async function encryptAndSend(options: EncryptAndSendOptions): Promise<st
 
 	const sealed = pg.encrypt({
 		files,
-		recipients: [
-			pg.recipient.email(citizen.email), 
-			pg.recipient.emailDomain(organisation.email)
-		],
+		recipients: [pg.recipient.email(citizen.email), pg.recipient.emailDomain(organisation.email)],
 		sign: pg.sign.apiKey(apiKey),
 		onProgress,
 		signal: abortController?.signal
@@ -51,10 +48,7 @@ export async function encryptAndUpload(options: EncryptOptions): Promise<string>
 
 	const sealed = pg.encrypt({
 		files,
-		recipients: [
-			pg.recipient.email(citizen.email), 
-			pg.recipient.emailDomain(organisation.email)
-		],
+		recipients: [pg.recipient.email(citizen.email), pg.recipient.emailDomain(organisation.email)],
 		sign: pg.sign.apiKey(apiKey),
 		onProgress,
 		signal: abortController?.signal

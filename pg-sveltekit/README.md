@@ -1,42 +1,55 @@
-# sv
+# pg-sveltekit — PostGuard SvelteKit Example
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Example SvelteKit web app demonstrating how to use the [@e4a/pg-js](https://www.npmjs.com/package/@e4a/pg-js) SDK for the **Informatierijk notificeren** use case.
 
-## Creating a project
+## What it does
 
-If you're seeing this, you've probably already done this step. Congrats!
+A single-page app with two delivery modes:
 
-```sh
-# create a new project
-npx sv create my-app
-```
+1. **Encrypt & Send** — Encrypts files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and sends an email notification to the recipients.
+2. **Encrypt & Upload** — Same encryption and upload, but returns a UUID so you can distribute the download link yourself.
 
-To recreate this project with the same configuration:
+## Prerequisites
 
-```sh
-# recreate this project
-npx sv@0.12.8 create --template minimal --types ts --add prettier eslint mcp="ide:claude-code+setup:local" --install npm pg-sveltekit
-```
+- Node.js 18+
+- A PostGuard API key
 
-## Developing
+## Setup
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+1. **Install dependencies**:
 
-```sh
+   ```bash
+   cd pg-sveltekit
+   npm install
+   ```
+
+2. **Configure environment variables**:
+
+   ```bash
+   cp .env.example .env
+   # Edit .env with your PG_API_KEY
+   ```
+
+   Available variables (see `.env.example`):
+
+   | Variable              | Description                     | Default                                  |
+   | --------------------- | ------------------------------- | ---------------------------------------- |
+   | `PG_API_KEY`          | PostGuard API key (server-only) | _(required)_                             |
+   | `PUBLIC_PKG_URL`      | PostGuard PKG server URL        | `https://pkg.staging.postguard.eu`       |
+   | `PUBLIC_CRYPTIFY_URL` | Cryptify file-sharing URL       | `https://fileshare.staging.postguard.eu` |
+   | `PUBLIC_APP_NAME`     | App display name                | `PostGuard for Business Example`         |
+
+## Run
+
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-To create a production version of your app:
+## Build
 
-```sh
+```bash
 npm run build
+npm run preview   # preview the production build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

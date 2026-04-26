@@ -6,9 +6,11 @@ Example applications demonstrating PostGuard integration. Contains reference imp
 
 There are three sub-projects:
 
-- **pg-sveltekit/** -- SvelteKit web app using the `@e4a/pg-js` SDK.
-- **pg-dotnet/** -- .NET console app using the `postguard-dotnet` SDK.
-- **pg-manual/** -- Manual encryption/decryption using the `@e4a/pg-wasm` library directly.
+- **pg-sveltekit/** — SvelteKit web app using the `@e4a/pg-js` SDK.
+- **pg-dotnet/** — .NET console app using the `postguard-dotnet` SDK.
+- **pg-manual/** — Manual encryption/decryption using the `@e4a/pg-wasm` library directly.
+
+Each sub-project has its own README with full setup instructions.
 
 ## Development
 
@@ -20,16 +22,29 @@ npm install
 npm run dev
 ```
 
+See [pg-sveltekit/README.md](pg-sveltekit/README.md) for environment variables and build instructions.
+
 ### .NET example
 
-Requires .NET 8.0+ SDK, a Rust toolchain, and a PostGuard API key.
+Requires the .NET 10.0+ SDK and a PostGuard API key. The example uses the `E4A.PostGuard` NuGet package, so no Rust toolchain or local build of the native library is needed.
 
 ```bash
 cd pg-dotnet
+export PG_API_KEY="PG-your-key-here"
 dotnet run
 ```
 
-See [pg-dotnet/README.md](pg-dotnet/README.md) for full setup instructions including how to build the native library and configure your API key.
+See [pg-dotnet/README.md](pg-dotnet/README.md) for full setup instructions.
+
+### pg-manual example
+
+```bash
+cd pg-manual
+npm install
+npm run dev
+```
+
+See [pg-manual/README.md](pg-manual/README.md) for details.
 
 ## Releasing
 
