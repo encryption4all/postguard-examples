@@ -1,11 +1,13 @@
 # pg-sveltekit — PostGuard SvelteKit Example
 
-Example SvelteKit web application demonstrating how to use the [`@e4a/pg-js`](https://github.com/encryption4all/postguard-js) SDK for the **PostGuard for Business** use case.
+Example SvelteKit web app demonstrating how to use the [@e4a/pg-js](https://www.npmjs.com/package/@e4a/pg-js) SDK for the **Informatierijk notificeren** use case.
 
 ## What it does
 
-1. **Encrypt & Send** — Encrypts files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and sends an email notification to the recipient.
-2. **Decrypt & Download** — Opens an encrypted file from a Cryptify UUID, verifies the recipient's identity via Yivi, and downloads the decrypted files.
+A single-page app with two delivery modes:
+
+1. **Encrypt & Send** — Encrypts files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and sends an email notification to the recipients.
+2. **Encrypt & Upload** — Same encryption and upload, but returns a UUID so you can distribute the download link yourself.
 
 ## Prerequisites
 
@@ -14,27 +16,28 @@ Example SvelteKit web application demonstrating how to use the [`@e4a/pg-js`](ht
 
 ## Setup
 
-1. Install dependencies:
+1. **Install dependencies**:
 
    ```bash
+   cd pg-sveltekit
    npm install
    ```
 
-2. Copy the environment file and fill in your API key:
+2. **Configure environment variables**:
 
    ```bash
    cp .env.example .env
+   # Edit .env with your PG_API_KEY
    ```
 
-   ```sh
-   # Public (available in browser)
-   PUBLIC_PKG_URL=https://pkg.staging.postguard.eu
-   PUBLIC_CRYPTIFY_URL=https://fileshare.staging.postguard.eu
-   PUBLIC_APP_NAME=PostGuard for Business Example
+   Available variables (see `.env.example`):
 
-   # Server-only
-   PG_API_KEY=PG-API-your-key-here
-   ```
+   | Variable              | Description                     | Default                                  |
+   | --------------------- | ------------------------------- | ---------------------------------------- |
+   | `PG_API_KEY`          | PostGuard API key (server-only) | _(required)_                             |
+   | `PUBLIC_PKG_URL`      | PostGuard PKG server URL        | `https://pkg.staging.postguard.eu`       |
+   | `PUBLIC_CRYPTIFY_URL` | Cryptify file-sharing URL       | `https://fileshare.staging.postguard.eu` |
+   | `PUBLIC_APP_NAME`     | App display name                | `PostGuard for Business Example`         |
 
 ## Run
 
@@ -42,30 +45,11 @@ Example SvelteKit web application demonstrating how to use the [`@e4a/pg-js`](ht
 npm run dev
 ```
 
-## How it works
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-The app initializes a `PostGuard` instance with the PKG and Cryptify URLs, then uses the `Sealed` builder pattern for encryption and the `Opened` builder for decryption:
+## Build
 
-```ts
-import { PostGuard } from '@e4a/pg-js';
-
-const pg = new PostGuard({ pkgUrl: PKG_URL, cryptifyUrl: CRYPTIFY_URL });
-
-// Encrypt files and upload to Cryptify
-const sealed = pg.encrypt({
-  files,
-  recipients: [
-    pg.recipient.email('citizen@example.com'),
-    pg.recipient.emailDomain('info@org.nl')
-  ],
-  sign: pg.sign.apiKey(apiKey),
-});
-const { uuid } = await sealed.upload({ notify: { message: 'Your files' } });
-
-// Decrypt from a Cryptify UUID
-const opened = pg.open({ uuid });
-const result = await opened.decrypt({ element: '#yivi-web' });
-result.download();
+```bash
+npm run build
+npm run preview   # preview the production build
 ```
-
-See the [PostGuard documentation](https://github.com/encryption4all/postguard-docs) for full SDK reference.

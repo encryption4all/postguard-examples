@@ -9,40 +9,13 @@ Example .NET console app demonstrating how to use the [postguard-dotnet](https:/
 
 ## Prerequisites
 
-- .NET 8.0+ SDK
-- Rust toolchain (for building the native crypto library)
+- .NET 10.0+ SDK
 - A PostGuard API key
-
-## Setup
-
-1. **Clone postguard-dotnet** alongside this repo:
-
-   ```
-   Repos/
-   ├── postguard-examples/   (this repo)
-   │   └── pg-dotnet/
-   └── postguard-dotnet/     (SDK)
-   ```
-
-2. **Build the native library** (one-time):
-
-   ```bash
-   cd ../postguard-dotnet
-   # Build pg-ffi from the postguard repo first:
-   cd ../postguard/pg-ffi && ./build.sh
-   ```
-
-3. **Set your API key**:
-
-   ```bash
-   cp .env.example .env
-   # Edit .env with your PG_API_KEY
-   ```
 
 ## Run
 
 ```bash
-export PG_API_KEY="PG-API-your-key-here"
+export PG_API_KEY="PG-your-key-here"
 dotnet run
 ```
 
