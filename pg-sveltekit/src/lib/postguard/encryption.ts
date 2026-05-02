@@ -19,7 +19,8 @@ export interface EncryptAndSendOptions extends EncryptOptions {
 	message: string | null;
 }
 
-/** Encrypt, upload to Cryptify, and have Cryptify send the email to recipients. */
+/** Encrypt, upload to Cryptify, and have Cryptify send the download-link
+ *  email to each recipient. */
 export async function encryptAndSend(options: EncryptAndSendOptions): Promise<string> {
 	const { files, citizen, organisation, apiKey, message, onProgress, abortController } = options;
 
@@ -33,16 +34,17 @@ export async function encryptAndSend(options: EncryptAndSendOptions): Promise<st
 
 	const result = await sealed.upload({
 		notify: {
+			recipients: true,
 			message: message ?? undefined,
-			language: 'EN',
-			confirmToSender: false
+			language: 'EN'
 		}
 	});
 
 	return result.uuid;
 }
 
-/** Encrypt and upload to Cryptify without sending email. Returns the UUID. */
+/** Encrypt and upload to Cryptify silently — no Cryptify-sent emails.
+ *  Returns the UUID for distribution through some other channel. */
 export async function encryptAndUpload(options: EncryptOptions): Promise<string> {
 	const { files, citizen, organisation, apiKey, onProgress, abortController } = options;
 
