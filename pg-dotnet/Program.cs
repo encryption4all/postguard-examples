@@ -21,10 +21,10 @@ var files = new List<PgFile>
     new("notes.txt", new MemoryStream("These are confidential notes.\nOnly the intended recipient should be able to read this."u8.ToArray()))
 };
 
-// ── Flow 1: Upload only (returns UUID for custom distribution) ──
+// ── Flow 1: Silent upload (returns UUID for custom distribution) ──
 
 Console.WriteLine("=== Flow 1: Encrypt and Upload ===");
-Console.WriteLine("Encrypting and uploading...");
+Console.WriteLine("Encrypting and uploading silently...");
 
 var sealed1 = pg.Encrypt(new EncryptInput
 {
@@ -37,15 +37,18 @@ var sealed1 = pg.Encrypt(new EncryptInput
     Sign = pg.Sign.ApiKey(apiKey)
 });
 
+// No UploadOptions → no Cryptify-sent emails. The caller distributes the
+// download link (or the recipients use the PostGuard browser/Outlook/
+// Thunderbird add-ons to decrypt directly).
 var result1 = await sealed1.UploadAsync();
 Console.WriteLine($"Upload complete! UUID: {result1.Uuid}");
 Console.WriteLine($"Download URL: https://postguard.eu/download?uuid={result1.Uuid}");
 Console.WriteLine();
 
-// ── Flow 2: Upload with email notification ──
+// ── Flow 2: Upload with Cryptify-sent recipient emails ──
 
 Console.WriteLine("=== Flow 2: Encrypt and Deliver ===");
-Console.WriteLine("Encrypting and delivering via email...");
+Console.WriteLine("Encrypting and delivering via Cryptify email...");
 
 // Reset streams for reuse
 foreach (var f in files) f.Content.Position = 0;
@@ -64,6 +67,10 @@ var result2 = await sealed2.UploadAsync(new UploadOptions
 {
     Notify = new NotifyOptions
     {
+        // Both opt-in: Cryptify emails the recipient with a download link
+        // and the sender with a confirmation receipt.
+        Recipients = true,
+        Sender = true,
         Message = "Your documents are attached. Please use PostGuard to decrypt.",
         Language = "EN"
     }
