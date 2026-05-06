@@ -1,4 +1,4 @@
-# pg-sveltekit — PostGuard SvelteKit Example
+# pg-sveltekit: PostGuard SvelteKit example
 
 Example SvelteKit web app demonstrating how to use the [@e4a/pg-js](https://www.npmjs.com/package/@e4a/pg-js) SDK for the **Informatierijk notificeren** use case.
 
@@ -6,8 +6,8 @@ Example SvelteKit web app demonstrating how to use the [@e4a/pg-js](https://www.
 
 A single-page app with two delivery modes:
 
-1. **Encrypt & Send** — Encrypts files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and sends an email notification to the recipients.
-2. **Encrypt & Upload** — Same encryption and upload, but returns a UUID so you can distribute the download link yourself.
+1. **Encrypt & Send**: encrypts files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and sends an email notification to the recipients.
+2. **Encrypt & Upload**: same encryption and upload, but returns a UUID so you can distribute the download link yourself.
 
 ## Prerequisites
 

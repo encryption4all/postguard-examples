@@ -1,11 +1,11 @@
-# pg-dotnet — PostGuard .NET Example
+# pg-dotnet: PostGuard .NET example
 
 Example .NET console app demonstrating how to use the [postguard-dotnet](https://github.com/encryption4all/postguard-dotnet) SDK for the **Informatierijk notificeren** use case.
 
 ## What it does
 
-1. **Encrypt & Upload** — Encrypts sample files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and returns a UUID for custom distribution.
-2. **Encrypt & Deliver** — Same as above, but also sends an email notification to the recipient via Cryptify.
+1. **Encrypt & Upload**: encrypts sample files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and returns a UUID for custom distribution.
+2. **Encrypt & Deliver**: same as above, but also sends an email notification to the recipient via Cryptify.
 
 ## Prerequisites
 
@@ -47,7 +47,7 @@ var sealed = pg.Encrypt(new EncryptInput
     Sign = pg.Sign.ApiKey(apiKey)
 });
 
-// Silent upload — no Cryptify-sent emails. Returns UUID for custom distribution.
+// Silent upload (no Cryptify-sent emails). Returns UUID for custom distribution.
 var result = await sealed.UploadAsync();
 
 // Or upload + have Cryptify email the recipients (and optionally the sender).
