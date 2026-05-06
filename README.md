@@ -6,9 +6,9 @@ Example applications demonstrating PostGuard integration. Contains reference imp
 
 There are three sub-projects:
 
-- **pg-sveltekit/** — SvelteKit web app using the `@e4a/pg-js` SDK.
-- **pg-dotnet/** — .NET console app using the `postguard-dotnet` SDK.
-- **pg-manual/** — Manual encryption/decryption using the `@e4a/pg-wasm` library directly.
+- `pg-sveltekit/`: SvelteKit web app using the `@e4a/pg-js` SDK.
+- `pg-dotnet/`: .NET console app using the `postguard-dotnet` SDK.
+- `pg-manual/`: manual encryption/decryption using the `@e4a/pg-wasm` library directly.
 
 Each sub-project has its own README with full setup instructions.
 

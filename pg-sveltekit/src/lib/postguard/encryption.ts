@@ -43,7 +43,7 @@ export async function encryptAndSend(options: EncryptAndSendOptions): Promise<st
 	return result.uuid;
 }
 
-/** Encrypt and upload to Cryptify silently — no Cryptify-sent emails.
+/** Encrypt and upload to Cryptify silently (no Cryptify-sent emails).
  *  Returns the UUID for distribution through some other channel. */
 export async function encryptAndUpload(options: EncryptOptions): Promise<string> {
 	const { files, citizen, organisation, apiKey, onProgress, abortController } = options;
