@@ -36,5 +36,8 @@
 	},
 	"dependencies": {
 		"@e4a/pg-js": "^1.2.0"
+	},
+	"overrides": {
+		"cookie": "^0.7.2"
 	}
 }
