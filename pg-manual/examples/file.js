@@ -1,5 +1,5 @@
 import { KeySorts, fetchKey, PKG_URL } from './utils'
-import { PolyfilledWritableStream } from 'web-streams-polyfill'
+import { WritableStream as PolyfilledWritableStream } from 'web-streams-polyfill'
 import { createWriteStream } from 'streamsaver'
 
 if (window.WritableStream == undefined) {
