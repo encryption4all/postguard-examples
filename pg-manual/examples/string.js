@@ -8,51 +8,52 @@ const modPromise = import('@e4a/pg-wasm')
 let ct
 
 async function encrypt() {
-    const input = document.getElementById('plain').value
-    console.log('input: ', input)
-
-    const { seal } = await modPromise
-    console.log('loaded WASM module: ', seal)
-
-    const mpk = await fetch(`${PKG_URL}/v2/parameters`)
-        .then((r) => r.json())
-        .then((j) => j.publicKey)
-
-    console.log('retrieved public key: ', mpk)
-
-    const policy = {
-        Bob: {
-            ts: Math.round(Date.now() / 1000),
-            con: [{ t: 'irma-demo.sidn-pbdf.email.email', v: 'bob@example.com' }],
-        },
-    }
-
-    // This policy is visible to everyone.
-    const pubSignId = [{ t: 'irma-demo.gemeente.personalData.fullname', v: 'Alice' }]
-
-    // This policy is only visible to recipients.
-    const privSignId = [{ t: 'irma-demo.gemeente.personalData.bsn', v: '1234' }]
-
-    // We retrieve keys for these policies.
-    let { pubSignKey, privSignKey } = await fetchKey(
-        KeySorts.Signing,
-        { con: [...pubSignId, ...privSignId] },
-        undefined,
-        { pubSignId, privSignId }
-    )
-    console.log('got public signing key for Alice: ', pubSignKey)
-    console.log('got private signing key for Alice: ', privSignKey)
-
-    const sealOptions = {
-        policy,
-        pubSignKey,
-        privSignKey,
-    }
-
-    const encoded = new TextEncoder().encode(input)
-    const t0 = performance.now()
-
+    clearStatus()
     try {
+        const input = document.getElementById('plain').value
+        console.log('input: ', input)
+
+        const { seal } = await modPromise
+        console.log('loaded WASM module: ', seal)
+
+        const mpk = await fetch(`${PKG_URL}/v2/parameters`)
+            .then((r) => r.json())
+            .then((j) => j.publicKey)
+
+        console.log('retrieved public key: ', mpk)
+
+        const policy = {
+            Bob: {
+                ts: Math.round(Date.now() / 1000),
+                con: [{ t: 'irma-demo.sidn-pbdf.email.email', v: 'bob@example.com' }],
+            },
+        }
+
+        // This policy is visible to everyone.
+        const pubSignId = [{ t: 'irma-demo.gemeente.personalData.fullname', v: 'Alice' }]
+
+        // This policy is only visible to recipients.
+        const privSignId = [{ t: 'irma-demo.gemeente.personalData.bsn', v: '1234' }]
+
+        // We retrieve keys for these policies.
+        let { pubSignKey, privSignKey } = await fetchKey(
+            KeySorts.Signing,
+            { con: [...pubSignId, ...privSignId] },
+            undefined,
+            { pubSignId, privSignId }
+        )
+        console.log('got public signing key for Alice: ', pubSignKey)
+        console.log('got private signing key for Alice: ', privSignKey)
+
+        const sealOptions = {
+            policy,
+            pubSignKey,
+            privSignKey,
+        }
+
+        const encoded = new TextEncoder().encode(input)
+        const t0 = performance.now()
+
         ct = await seal(mpk, sealOptions, encoded)
         const tEncrypt = performance.now() - t0
 
@@ -62,20 +63,21 @@ async function encrypt() {
         const outputEl = document.getElementById('ciphertext')
         outputEl.value = ct
     } catch (e) {
-        console.log('error during sealing: ', e)
+        showError('error during encryption: ', e)
     }
 }
 
 async function decrypt() {
-    const { Unsealer } = await modPromise
-
-    const vk = await fetch(`${PKG_URL}/v2/sign/parameters`)
-        .then((r) => r.json())
-        .then((j) => j.publicKey)
-
-    console.log('retrieved verification key: ', vk)
-
+    clearStatus()
     try {
+        const { Unsealer } = await modPromise
+
+        const vk = await fetch(`${PKG_URL}/v2/sign/parameters`)
+            .then((r) => r.json())
+            .then((j) => j.publicKey)
+
+        console.log('retrieved verification key: ', vk)
+
         const unsealer = await Unsealer.new(ct, vk)
         const header = unsealer.inspect_header()
         console.log('header contains the following recipients: ', header)
@@ -102,8 +104,19 @@ async function decrypt() {
         document.getElementById('original').textContent = original
         document.getElementById('sender').textContent = JSON.stringify(policy)
     } catch (e) {
-        console.log('error during unsealing: ', e)
+        showError('error during decryption: ', e)
     }
+}
+
+function clearStatus() {
+    const el = document.getElementById('status')
+    if (el) el.textContent = ''
+}
+
+function showError(label, e) {
+    console.log(label, e)
+    const el = document.getElementById('status')
+    if (el) el.textContent = `${label}${e && e.message ? e.message : e}`
 }
 
 window.onload = async () => {

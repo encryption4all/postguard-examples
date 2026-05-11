@@ -49,12 +49,13 @@ export async function fetchKey(
                     .then((r) => r.json())
                     .then((json) => {
                         if (json.status !== 'DONE' || json.proofStatus !== 'VALID')
-                            throw new Error('not done and valid')
+                            throw new Error(
+                                `key fetch failed: status=${json.status} proofStatus=${json.proofStatus}`
+                            )
                         return sort === KeySorts.Encryption
                             ? json.key
                             : { pubSignKey: json.pubSignKey, privSignKey: json.privSignKey }
                     })
-                    .catch((e) => console.log('error: ', e))
             },
         },
     }
