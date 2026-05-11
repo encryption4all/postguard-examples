@@ -23,21 +23,31 @@ A single-page app with two delivery modes:
    npm install
    ```
 
-2. **Configure environment variables**:
+2. **Configure environment variables** (optional):
 
    ```bash
    cp .env.example .env
-   # Edit .env with your PG_API_KEY
+   # Edit .env only if you want to override the default PKG / Cryptify URLs.
    ```
 
    Available variables (see `.env.example`):
 
-   | Variable              | Description                     | Default                                  |
-   | --------------------- | ------------------------------- | ---------------------------------------- |
-   | `PG_API_KEY`          | PostGuard API key (server-only) | _(required)_                             |
-   | `PUBLIC_PKG_URL`      | PostGuard PKG server URL        | `https://pkg.staging.postguard.eu`       |
-   | `PUBLIC_CRYPTIFY_URL` | Cryptify file-sharing URL       | `https://fileshare.staging.postguard.eu` |
-   | `PUBLIC_APP_NAME`     | App display name                | `PostGuard for Business Example`         |
+   | Variable              | Description               | Default                                  |
+   | --------------------- | ------------------------- | ---------------------------------------- |
+   | `PUBLIC_PKG_URL`      | PostGuard PKG server URL  | `https://pkg.staging.postguard.eu`       |
+   | `PUBLIC_CRYPTIFY_URL` | Cryptify file-sharing URL | `https://fileshare.staging.postguard.eu` |
+   | `PUBLIC_APP_NAME`     | App display name          | `PostGuard for Business Example`         |
+
+   The PostGuard API key is **not** read from an env var — paste it into
+   the API-key field in the running app. This example uses `@e4a/pg-js`
+   in the browser, so the key must reach the browser to sign the upload.
+   Asking the user to supply it directly is the safest demo pattern: the
+   key never ends up in the page source or a SvelteKit data island.
+
+   For a production integration where the key must never reach the
+   browser, move the encrypt-and-upload call into a server endpoint
+   (SvelteKit form action or `+server.ts`) and have the browser submit
+   files + recipient data to that endpoint instead.
 
 ## Run
 
