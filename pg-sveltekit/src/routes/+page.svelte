@@ -3,6 +3,8 @@
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
 	import { encryptAndSend, encryptAndUpload } from '$lib/postguard/encryption';
 
+	let { data } = $props();
+
 	type SendState = 'idle' | 'encrypting' | 'done' | 'error';
 	type DeliveryMode = 'send-email' | 'upload-only';
 
@@ -22,7 +24,7 @@
 	let citizenName = $state('');
 	let orgEmail = $state('');
 	let orgName = $state('');
-	let apiKey = $state('');
+	let apiKey = $state(data.apiKey);
 	let message = $state('');
 	let sendState: SendState = $state('idle');
 	let progress = $state(0);
@@ -85,7 +87,7 @@
 		citizenName = '';
 		orgEmail = '';
 		orgName = '';
-		apiKey = '';
+		apiKey = data.apiKey;
 		message = '';
 		sendState = 'idle';
 		progress = 0;
