@@ -20,7 +20,11 @@ export interface EncryptAndSendOptions extends EncryptOptions {
 }
 
 /** Encrypt, upload to Cryptify, and have Cryptify send the download-link
- *  email to each recipient. */
+ *  email to each recipient.
+ *
+ *  NOTE: the staging Cryptify (storage.staging.postguard.eu) does NOT
+ *  actually deliver these emails — recipients won't receive anything on
+ *  staging. The upload itself still succeeds. */
 export async function encryptAndSend(options: EncryptAndSendOptions): Promise<string> {
 	const { files, citizen, organisation, apiKey, message, onProgress, abortController } = options;
 
