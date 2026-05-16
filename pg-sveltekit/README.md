@@ -34,7 +34,7 @@ A single-page app with two delivery modes:
    | Variable              | Description               | Default                                  |
    | --------------------- | ------------------------- | ---------------------------------------- |
    | `PUBLIC_PKG_URL`      | PostGuard PKG server URL  | `https://pkg.staging.postguard.eu`       |
-   | `PUBLIC_CRYPTIFY_URL` | Cryptify file-sharing URL | `https://fileshare.staging.postguard.eu` |
+   | `PUBLIC_CRYPTIFY_URL` | Cryptify file-sharing URL | `https://storage.staging.postguard.eu`   |
    | `PUBLIC_APP_NAME`     | App display name          | `PostGuard for Business Example`         |
 
 ## Run

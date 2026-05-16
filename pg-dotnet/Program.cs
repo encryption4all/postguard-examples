@@ -4,7 +4,7 @@ using E4A.PostGuard.Models;
 var pkgUrl = Environment.GetEnvironmentVariable("PG_PKG_URL")
     ?? "https://pkg.staging.postguard.eu";
 var cryptifyUrl = Environment.GetEnvironmentVariable("PG_CRYPTIFY_URL")
-    ?? "https://fileshare.staging.postguard.eu";
+    ?? "https://storage.staging.postguard.eu";
 var apiKey = Environment.GetEnvironmentVariable("PG_API_KEY")
     ?? throw new Exception("Set PG_API_KEY environment variable");
 
