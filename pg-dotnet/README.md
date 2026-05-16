@@ -9,7 +9,7 @@ Example .NET console app demonstrating how to use the [postguard-dotnet](https:/
 
 ## Prerequisites
 
-- .NET 10.0+ SDK
+- .NET 8.0 or 10.0 SDK
 - A PostGuard API key
 
 ## Run
