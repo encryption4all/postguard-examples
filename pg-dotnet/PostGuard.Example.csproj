@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.2.0" />
     <PackageReference Include="E4A.PostGuard" Version="0.3.0" />
   </ItemGroup>
 

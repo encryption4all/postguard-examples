@@ -14,16 +14,18 @@ Example .NET console app demonstrating how to use the [postguard-dotnet](https:/
 
 ## Run
 
+Copy `.env.example` to `.env` and fill in your `PG_API_KEY`:
+
 ```bash
-export PG_API_KEY="PG-your-key-here"
+cp .env.example .env
+# edit .env, then:
 dotnet run
 ```
 
-Or override the staging URLs:
+Or set variables directly in your shell:
 
 ```bash
-export PG_PKG_URL="https://pkg.postguard.eu"
-export PG_CRYPTIFY_URL="https://fileshare.postguard.eu"
+export PG_API_KEY="PG-your-key-here"
 dotnet run
 ```
 

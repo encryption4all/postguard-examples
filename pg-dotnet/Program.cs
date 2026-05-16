@@ -1,5 +1,8 @@
+using DotNetEnv;
 using E4A.PostGuard;
 using E4A.PostGuard.Models;
+
+Env.TraversePath().Load();
 
 var pkgUrl = Environment.GetEnvironmentVariable("PG_PKG_URL")
     ?? "https://pkg.staging.postguard.eu";
