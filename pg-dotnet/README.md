@@ -28,7 +28,13 @@ export PG_API_KEY="PG-your-key-here"
 dotnet run
 ```
 
-Override the default URLs with `PG_PKG_URL` / `PG_CRYPTIFY_URL` (via user-secrets or env vars) if needed.
+Override the default URLs (via user-secrets or env vars) if needed:
+
+| Variable          | Description                                | Default                                                                         |
+| ----------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
+| `PG_PKG_URL`      | PostGuard PKG server URL                   | `https://pkg.staging.postguard.eu`                                              |
+| `PG_CRYPTIFY_URL` | Cryptify file-sharing URL                  | `https://storage.staging.postguard.eu`                                          |
+| `PG_DOWNLOAD_URL` | PostGuard website used in `/download` URLs | `https://staging.postguard.eu` on staging Cryptify, else `https://postguard.eu` |
 
 ## Staging Cryptify does not send email
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FileDropzone from '$lib/components/FileDropzone.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
-	import { CRYPTIFY_URL, IS_CRYPTIFY_STAGING } from '$lib/config';
+	import { CRYPTIFY_URL, DOWNLOAD_URL, IS_CRYPTIFY_STAGING } from '$lib/config';
 	import { encryptAndSend, encryptAndUpload } from '$lib/postguard/encryption';
 
 	type SendState = 'idle' | 'encrypting' | 'done' | 'error';
@@ -136,7 +136,7 @@
 						Open this link yourself to verify the decrypt flow end-to-end (the recipient won't get it
 						via email on staging):
 					</p>
-					<code class="download-url">https://postguard.eu/download?uuid={resultUuid}</code>
+					<code class="download-url">{DOWNLOAD_URL}/download?uuid={resultUuid}</code>
 				</div>
 			{/if}
 		{:else}
@@ -162,7 +162,7 @@
 					Use this UUID to build your own download link and send it however you like (your own email
 					system, chat, etc). Recipients can decrypt at:
 				</p>
-				<code class="download-url">https://postguard.eu/download?uuid={resultUuid}</code>
+				<code class="download-url">{DOWNLOAD_URL}/download?uuid={resultUuid}</code>
 			</div>
 		{/if}
 		<button class="primary-btn" onclick={handleReset}>Start over</button>

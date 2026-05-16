@@ -19,6 +19,13 @@ var apiKey = config["PG_API_KEY"]
 var isCryptifyStaging = Uri.TryCreate(cryptifyUrl, UriKind.Absolute, out var cryptifyUri)
     && cryptifyUri.Host.Contains("staging", StringComparison.OrdinalIgnoreCase);
 
+// Base URL of the PostGuard website that handles /download?uuid=…. Files
+// uploaded to the staging Cryptify are only retrievable via the staging
+// website, so the default tracks isCryptifyStaging; override with the env
+// var or user-secret if your deployment differs.
+var downloadBaseUrl = config["PG_DOWNLOAD_URL"]
+    ?? (isCryptifyStaging ? "https://staging.postguard.eu" : "https://postguard.eu");
+
 var pg = new PostGuard(new PostGuardConfig
 {
     PkgUrl = pkgUrl,
@@ -63,7 +70,7 @@ var sealed1 = pg.Encrypt(new EncryptInput
 // Thunderbird add-ons to decrypt directly).
 var result1 = await sealed1.UploadAsync();
 Console.WriteLine($"Upload complete! UUID: {result1.Uuid}");
-Console.WriteLine($"Download URL: https://postguard.eu/download?uuid={result1.Uuid}");
+Console.WriteLine($"Download URL: {downloadBaseUrl}/download?uuid={result1.Uuid}");
 Console.WriteLine();
 
 // ── Flow 2: Upload with Cryptify-sent recipient emails ──
@@ -97,7 +104,7 @@ var result2 = await sealed2.UploadAsync(new UploadOptions
     }
 });
 Console.WriteLine($"Upload complete! UUID: {result2.Uuid}");
-Console.WriteLine($"Download URL: https://postguard.eu/download?uuid={result2.Uuid}");
+Console.WriteLine($"Download URL: {downloadBaseUrl}/download?uuid={result2.Uuid}");
 if (isCryptifyStaging)
 {
     Console.WriteLine("[staging] No email was sent to bob@example.com — open the download");
