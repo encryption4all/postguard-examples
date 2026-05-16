@@ -33,7 +33,7 @@ dotnet run
 var pg = new PostGuard(new PostGuardConfig
 {
     PkgUrl = "https://pkg.staging.postguard.eu",
-    CryptifyUrl = "https://fileshare.staging.postguard.eu"
+    CryptifyUrl = "https://storage.staging.postguard.eu"
 });
 
 // Encrypt returns a lazy Sealed builder
