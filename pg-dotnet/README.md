@@ -30,6 +30,18 @@ dotnet run
 
 Override the default URLs with `PG_PKG_URL` / `PG_CRYPTIFY_URL` (via user-secrets or env vars) if needed.
 
+## Staging email mode
+
+The default Cryptify URL points at `storage.staging.postguard.eu`, which runs with
+[`staging_mode = true`](https://github.com/encryption4all/cryptify). When `Notify.Recipients`
+or `Notify.Sender` is enabled, Cryptify **logs** the email it would have sent (a
+`[STAGING] Email NOT sent ...` line containing recipients, sender, expiry, and download URL)
+instead of contacting SMTP. The upload flow still returns success.
+
+This means Flow 2 ("Encrypt & Deliver") will *not* deliver mail to real inboxes on staging —
+you can verify the behaviour via the Cryptify server logs. Point `PG_CRYPTIFY_URL` at the
+production URL to exercise real email delivery.
+
 ## How it works
 
 ```csharp

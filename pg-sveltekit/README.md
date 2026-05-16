@@ -45,6 +45,18 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
+## Staging email mode
+
+The default `PUBLIC_CRYPTIFY_URL` points at `storage.staging.postguard.eu`, which runs with
+[`staging_mode = true`](https://github.com/encryption4all/cryptify). For the **Encrypt & Send**
+flow, Cryptify **logs** the recipient/sender email it would have sent
+(a `[STAGING] Email NOT sent ...` line containing recipients, sender, expiry, and download URL)
+instead of contacting SMTP. The upload flow still returns success and the download link works.
+
+So on staging, the **Encrypt & Send** UI succeeds but no email lands in a real inbox — verify
+the behaviour via the Cryptify server logs. Point `PUBLIC_CRYPTIFY_URL` at the production URL
+to exercise real email delivery.
+
 ## Build
 
 ```bash

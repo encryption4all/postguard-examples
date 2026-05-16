@@ -73,6 +73,9 @@ var result2 = await sealed2.UploadAsync(new UploadOptions
     {
         // Both opt-in: Cryptify emails the recipient with a download link
         // and the sender with a confirmation receipt.
+        // NOTE: when Cryptify runs with staging_mode = true (the default on
+        // storage.staging.postguard.eu), these emails are logged server-side
+        // and NOT delivered. See the README "Staging email mode" section.
         Recipients = true,
         Sender = true,
         Message = "Your documents are attached. Please use PostGuard to decrypt.",
@@ -81,3 +84,4 @@ var result2 = await sealed2.UploadAsync(new UploadOptions
 });
 Console.WriteLine($"Delivered! UUID: {result2.Uuid}");
 Console.WriteLine("Recipients will receive an email from noreply@postguard.eu");
+Console.WriteLine("(On staging the email is logged server-side, not actually sent.)");
