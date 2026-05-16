@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FileDropzone from '$lib/components/FileDropzone.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
+	import { CRYPTIFY_URL, IS_CRYPTIFY_STAGING } from '$lib/config';
 	import { encryptAndSend, encryptAndUpload } from '$lib/postguard/encryption';
 
 	type SendState = 'idle' | 'encrypting' | 'done' | 'error';
@@ -103,10 +104,20 @@
 {#if sendState === 'done'}
 	<div class="success-box">
 		{#if deliveryMode === 'send-email'}
-			<h2>Email sent</h2>
-			<p>
-				Cryptify sent an email from <code>noreply@postguard.eu</code> to the following recipients:
-			</p>
+			{#if IS_CRYPTIFY_STAGING}
+				<h2>Upload complete (no email sent — staging)</h2>
+				<p>
+					You're pointed at the staging Cryptify (<code>{CRYPTIFY_URL}</code>), which
+					<strong>does not deliver notification emails</strong> — that keeps real inboxes clean while
+					you're integrating. The upload itself worked.
+				</p>
+				<p>Intended recipients (would have been emailed in production):</p>
+			{:else}
+				<h2>Email sent</h2>
+				<p>
+					Cryptify sent an email from <code>noreply@postguard.eu</code> to the following recipients:
+				</p>
+			{/if}
 			<ul class="recipient-list">
 				<li>
 					<strong>{citizenName || citizenEmail}</strong> ({citizenEmail})
@@ -119,6 +130,15 @@
 				</li>
 			</ul>
 			<p class="uuid-line">File UUID: <code>{resultUuid}</code></p>
+			{#if IS_CRYPTIFY_STAGING}
+				<div class="info-box">
+					<p>
+						Open this link yourself to verify the decrypt flow end-to-end (the recipient won't get it
+						via email on staging):
+					</p>
+					<code class="download-url">https://postguard.eu/download?uuid={resultUuid}</code>
+				</div>
+			{/if}
 		{:else}
 			<h2>Upload complete</h2>
 			<p>The encrypted file has been uploaded to Cryptify.</p>
