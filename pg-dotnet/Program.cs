@@ -12,11 +12,28 @@ var cryptifyUrl = config["PG_CRYPTIFY_URL"] ?? "https://storage.staging.postguar
 var apiKey = config["PG_API_KEY"]
     ?? throw new Exception("Set PG_API_KEY via `dotnet user-secrets set PG_API_KEY \"<key>\"` or as an environment variable.");
 
+// Heuristic: the staging Cryptify (hostname contains "staging") does NOT
+// actually deliver notification emails — this keeps real inboxes clean
+// while you wire up the SDK. Detect it from the URL so the example can
+// be honest about what will and won't happen.
+var isCryptifyStaging = Uri.TryCreate(cryptifyUrl, UriKind.Absolute, out var cryptifyUri)
+    && cryptifyUri.Host.Contains("staging", StringComparison.OrdinalIgnoreCase);
+
 var pg = new PostGuard(new PostGuardConfig
 {
     PkgUrl = pkgUrl,
     CryptifyUrl = cryptifyUrl
 });
+
+if (isCryptifyStaging)
+{
+    Console.WriteLine($"[staging] Using staging Cryptify ({cryptifyUrl}).");
+    Console.WriteLine("[staging] Notification emails are NOT delivered on staging, so");
+    Console.WriteLine("[staging] recipients/senders won't actually receive anything.");
+    Console.WriteLine("[staging] The upload itself works and the download URLs below are");
+    Console.WriteLine("[staging] real — use them to verify the decrypt flow yourself.");
+    Console.WriteLine();
+}
 
 // Create sample files
 var files = new List<PgFile>
@@ -71,17 +88,24 @@ var result2 = await sealed2.UploadAsync(new UploadOptions
 {
     Notify = new NotifyOptions
     {
-        // Both opt-in: Cryptify emails the recipient with a download link
-        // and the sender with a confirmation receipt.
-        // NOTE: when Cryptify runs with staging_mode = true (the default on
-        // storage.staging.postguard.eu), these emails are logged server-side
-        // and NOT delivered. See the README "Staging email mode" section.
+        // Both opt-in: in production Cryptify emails the recipient with a
+        // download link and the sender with a confirmation receipt.
+        // On the staging Cryptify these emails are NOT actually delivered
+        // (see staging banner above), but the call still succeeds.
         Recipients = true,
         Sender = true,
         Message = "Your documents are attached. Please use PostGuard to decrypt.",
         Language = "EN"
     }
 });
-Console.WriteLine($"Delivered! UUID: {result2.Uuid}");
-Console.WriteLine("Recipients will receive an email from noreply@postguard.eu");
-Console.WriteLine("(On staging the email is logged server-side, not actually sent.)");
+Console.WriteLine($"Upload complete! UUID: {result2.Uuid}");
+Console.WriteLine($"Download URL: https://postguard.eu/download?uuid={result2.Uuid}");
+if (isCryptifyStaging)
+{
+    Console.WriteLine("[staging] No email was sent to bob@example.com — open the download");
+    Console.WriteLine("[staging] URL above yourself to verify the decrypt flow end-to-end.");
+}
+else
+{
+    Console.WriteLine("Recipients will receive an email from noreply@postguard.eu");
+}
