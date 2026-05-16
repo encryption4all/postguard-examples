@@ -17,5 +17,13 @@ function detectStagingCryptify(url: string): boolean {
 }
 export const IS_CRYPTIFY_STAGING = detectStagingCryptify(CRYPTIFY_URL);
 
+// Base URL of the PostGuard website that handles /download?uuid=…. Files
+// uploaded to the staging Cryptify are only retrievable via the staging
+// website, so the default tracks IS_CRYPTIFY_STAGING; override with
+// PUBLIC_DOWNLOAD_URL if your deployment differs.
+export const DOWNLOAD_URL =
+	env.PUBLIC_DOWNLOAD_URL ||
+	(IS_CRYPTIFY_STAGING ? 'https://staging.postguard.eu' : 'https://postguard.eu');
+
 export const UPLOAD_CHUNK_SIZE = 1024 * 1024; // 1MB
 export const FILEREAD_CHUNK_SIZE = 1024 * 1024; // 1MB
