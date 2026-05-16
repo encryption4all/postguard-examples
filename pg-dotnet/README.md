@@ -14,20 +14,21 @@ Example .NET console app demonstrating how to use the [postguard-dotnet](https:/
 
 ## Run
 
-Copy `.env.example` to `.env` and fill in your `PG_API_KEY`:
+Store your API key with [user-secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) (recommended for local dev — kept outside the repo):
 
 ```bash
-cp .env.example .env
-# edit .env, then:
+dotnet user-secrets set "PG_API_KEY" "PG-your-key-here"
 dotnet run
 ```
 
-Or set variables directly in your shell:
+Or pass it via environment variable:
 
 ```bash
 export PG_API_KEY="PG-your-key-here"
 dotnet run
 ```
+
+Override the default URLs with `PG_PKG_URL` / `PG_CRYPTIFY_URL` (via user-secrets or env vars) if needed.
 
 ## How it works
 

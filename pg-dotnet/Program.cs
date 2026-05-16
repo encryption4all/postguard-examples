@@ -1,15 +1,16 @@
-using DotNetEnv;
 using E4A.PostGuard;
 using E4A.PostGuard.Models;
+using Microsoft.Extensions.Configuration;
 
-Env.TraversePath().Load();
+var config = new ConfigurationBuilder()
+    .AddUserSecrets<Program>(optional: true)
+    .AddEnvironmentVariables()
+    .Build();
 
-var pkgUrl = Environment.GetEnvironmentVariable("PG_PKG_URL")
-    ?? "https://pkg.staging.postguard.eu";
-var cryptifyUrl = Environment.GetEnvironmentVariable("PG_CRYPTIFY_URL")
-    ?? "https://storage.staging.postguard.eu";
-var apiKey = Environment.GetEnvironmentVariable("PG_API_KEY")
-    ?? throw new Exception("Set PG_API_KEY environment variable");
+var pkgUrl = config["PG_PKG_URL"] ?? "https://pkg.staging.postguard.eu";
+var cryptifyUrl = config["PG_CRYPTIFY_URL"] ?? "https://storage.staging.postguard.eu";
+var apiKey = config["PG_API_KEY"]
+    ?? throw new Exception("Set PG_API_KEY via `dotnet user-secrets set PG_API_KEY \"<key>\"` or as an environment variable.");
 
 var pg = new PostGuard(new PostGuardConfig
 {
