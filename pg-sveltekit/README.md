@@ -31,11 +31,12 @@ A single-page app with two delivery modes:
 
    Available variables (see `.env.example`):
 
-   | Variable              | Description               | Default                                  |
-   | --------------------- | ------------------------- | ---------------------------------------- |
-   | `PUBLIC_PKG_URL`      | PostGuard PKG server URL  | `https://pkg.staging.postguard.eu`       |
-   | `PUBLIC_CRYPTIFY_URL` | Cryptify file-sharing URL | `https://storage.staging.postguard.eu`   |
-   | `PUBLIC_APP_NAME`     | App display name          | `PostGuard for Business Example`         |
+   | Variable               | Description                                | Default                                                                       |
+   | ---------------------- | ------------------------------------------ | ----------------------------------------------------------------------------- |
+   | `PUBLIC_PKG_URL`       | PostGuard PKG server URL                   | `https://pkg.staging.postguard.eu`                                            |
+   | `PUBLIC_CRYPTIFY_URL`  | Cryptify file-sharing URL                  | `https://storage.staging.postguard.eu`                                        |
+   | `PUBLIC_DOWNLOAD_URL`  | PostGuard website used in `/download` URLs | `https://staging.postguard.eu` on staging Cryptify, else `https://postguard.eu` |
+   | `PUBLIC_APP_NAME`      | App display name                           | `PostGuard for Business Example`                                              |
 
 ## Run
 
