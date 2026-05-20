@@ -133,8 +133,8 @@
 			{#if IS_CRYPTIFY_STAGING}
 				<div class="info-box">
 					<p>
-						Open this link yourself to verify the decrypt flow end-to-end (the recipient won't get it
-						via email on staging):
+						Open this link yourself to verify the decrypt flow end-to-end (the recipient won't get
+						it via email on staging):
 					</p>
 					<code class="download-url">{DOWNLOAD_URL}/download?uuid={resultUuid}</code>
 				</div>
