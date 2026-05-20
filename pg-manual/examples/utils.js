@@ -1,6 +1,6 @@
-import * as YiviCore from '@privacybydesign/yivi-core'
-import * as YiviClient from '@privacybydesign/yivi-client'
-import * as YiviPopup from '@privacybydesign/yivi-popup'
+import { YiviCore } from '@privacybydesign/yivi-core'
+import { YiviClient } from '@privacybydesign/yivi-client'
+import { YiviPopup } from '@privacybydesign/yivi-popup'
 import '@privacybydesign/yivi-css'
 
 export const KeySorts = {
