@@ -13,7 +13,7 @@ Files come from `PG_INPUT_FILES` (comma-separated paths) or two in-memory demo f
 
 ## Prerequisites
 
-- **Node.js 20.6+** — older versions lack `--env-file-if-exists` (used by `npm start`) and the `File` global (used by the SDK). Node 22 LTS recommended. The SDK itself supports Node 20.3+, Bun, and Deno.
+- **Node.js 22+** — matches `@e4a/pg-js`'s `engines.node`. The SDK also supports Bun and Deno; the same encryption code in `src/encryption.mjs` works there too.
 - A PostGuard for Business API key.
 
 ## Setup
@@ -25,7 +25,7 @@ cp .env.example .env
 # edit .env: set at minimum PG_API_KEY
 ```
 
-The `package.json` depends on the SDK via `file:../../postguard-js`, so any local changes you make to the SDK take effect after `cd ../../postguard-js && npm run build` followed by `cd ../postguard-examples/pg-node && npm install`. Swap that to `"^X.Y.Z"` once a real release is published.
+The `package.json` depends on the published [`@e4a/pg-js`](https://www.npmjs.com/package/@e4a/pg-js) (currently `^1.9.0`).
 
 ## Run
 
