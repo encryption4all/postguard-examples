@@ -1,19 +1,21 @@
 # pg-node: PostGuard Node.js example
 
-Node.js example demonstrating how to use the [@e4a/pg-js](https://www.npmjs.com/package/@e4a/pg-js) SDK from a server runtime. Mirrors the [pg-sveltekit](../pg-sveltekit) example's "Informatierijk notificeren" flow (citizen + organisation recipients) but as a CLI script — drop-in starting point for backend integrations.
+Node.js example demonstrating how to use the [@e4a/pg-js](https://www.npmjs.com/package/@e4a/pg-js) SDK from a server runtime. Mirrors the [pg-sveltekit](../pg-sveltekit) example's "Informatierijk notificeren" flow (citizen + organisation recipients) as a CLI script. Drop-in starting point for backend integrations.
 
 ## What it does
 
-Two modes, selected by the script flag:
+Two modes, selected by an npm script:
 
-1. **Send** (`npm run send`) — encrypts the input files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and asks Cryptify to email each recipient a download link.
-2. **Upload-only** (`npm run upload`) — same encryption + upload, but silent. Cryptify returns a UUID you can distribute through some other channel.
+| Mode        | Command          | What it does                                                                                                                                              |
+| ----------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Send        | `npm run send`   | Encrypts the input files for a citizen (exact email) and an organisation (email domain), uploads to Cryptify, and asks Cryptify to email each recipient. |
+| Upload-only | `npm run upload` | Same encryption and upload, but silent. Cryptify returns a UUID you can distribute through some other channel.                                            |
 
-Files come from `PG_INPUT_FILES` (comma-separated paths) or two in-memory demo files if that is unset.
+Files come from `PG_INPUT_FILES` (comma-separated paths), or two in-memory demo files if that is unset.
 
 ## Prerequisites
 
-- **Node.js 22+** — matches `@e4a/pg-js`'s `engines.node`. The SDK also supports Bun and Deno; the same encryption code in `src/encryption.mjs` works there too.
+- **Node.js 22+**, matching `@e4a/pg-js`'s `engines.node`. The SDK also supports Bun and Deno; the same encryption code in `src/encryption.mjs` works there too.
 - A PostGuard for Business API key.
 
 ## Setup
@@ -38,7 +40,7 @@ The script prints the resulting `uuid` and the corresponding `…/download?uuid=
 
 ## Staging Cryptify does not send email
 
-The default `PG_CRYPTIFY_URL` is `storage.staging.postguard.eu` — the staging deployment. It **does not actually deliver notification emails**, so you can exercise the full upload + notify flow without spamming real inboxes while you integrate.
+The default `PG_CRYPTIFY_URL` is `storage.staging.postguard.eu`, the staging deployment. It **does not actually deliver notification emails**, so you can exercise the full upload + notify flow without spamming real inboxes while you integrate.
 
 - The upload itself works. You get back a real UUID and the download URL is usable.
 - `npm run send` succeeds, but no recipient mail is sent. Open the printed URL yourself to verify the decrypt flow end-to-end.
@@ -72,4 +74,4 @@ const sealed = pg.encrypt({
 const { uuid } = await sealed.upload({ notify: { recipients: true, message, language: 'EN' } });
 ```
 
-`notify` must be nested under an object — the SDK validates the shape and throws a clear `TypeError` if you pass `{ notify: true }` or forget to nest. See the [SDK README](https://github.com/encryption4all/postguard-js#server-side-usage-node-bun-deno) for the full server-side surface.
+`notify` must be nested under an object. The SDK validates the shape and throws a clear `TypeError` if you pass `{ notify: true }` or forget to nest. See the [SDK README](https://github.com/encryption4all/postguard-js#server-side-usage-node-bun-deno) for the full server-side surface.

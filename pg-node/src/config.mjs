@@ -1,5 +1,5 @@
-// Env-driven config. Run with `node --env-file=.env index.mjs` to load
-// from .env (Node 20.6+). Mirrors pg-sveltekit's config.ts.
+// Env-driven config. `.env` is loaded automatically by the npm scripts
+// via Node's `--env-file-if-exists`. Mirrors pg-sveltekit's config.ts.
 
 export const PKG_URL = process.env.PG_PKG_URL || 'https://pkg.staging.postguard.eu';
 export const CRYPTIFY_URL = process.env.PG_CRYPTIFY_URL || 'https://storage.staging.postguard.eu';

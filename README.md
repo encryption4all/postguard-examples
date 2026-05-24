@@ -27,7 +27,7 @@ See [pg-sveltekit/README.md](pg-sveltekit/README.md) for environment variables a
 
 ### Node.js example
 
-Requires Node.js 20.6+ and a PostGuard API key.
+Requires Node.js 22+ and a PostGuard API key.
 
 ```bash
 cd pg-node
