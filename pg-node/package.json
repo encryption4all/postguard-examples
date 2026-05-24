@@ -1,0 +1,19 @@
+{
+  "name": "pg-node",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "PostGuard Node.js example — encrypt + upload from a server",
+  "license": "MIT",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env index.mjs",
+    "send": "node --env-file-if-exists=.env index.mjs --send",
+    "upload": "node --env-file-if-exists=.env index.mjs --upload-only"
+  },
+  "dependencies": {
+    "@e4a/pg-js": "^1.9.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

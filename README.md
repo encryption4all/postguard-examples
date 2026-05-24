@@ -4,9 +4,10 @@
 
 Example applications demonstrating PostGuard integration. Contains reference implementations for developers building on PostGuard. Code snippets in docs.postguard.eu come from this repo.
 
-There are three sub-projects:
+There are four sub-projects:
 
 - `pg-sveltekit/`: SvelteKit web app using the `@e4a/pg-js` SDK.
+- `pg-node/`: Node.js CLI using the `@e4a/pg-js` SDK from a server runtime.
 - `pg-dotnet/`: .NET console app using the `postguard-dotnet` SDK.
 - `pg-manual/`: manual encryption/decryption using the `@e4a/pg-wasm` library directly.
 
@@ -23,6 +24,19 @@ npm run dev
 ```
 
 See [pg-sveltekit/README.md](pg-sveltekit/README.md) for environment variables and build instructions.
+
+### Node.js example
+
+Requires Node.js 20.6+ and a PostGuard API key.
+
+```bash
+cd pg-node
+npm install
+cp .env.example .env   # set at minimum PG_API_KEY
+npm run send           # encrypt + upload + notify recipients
+```
+
+See [pg-node/README.md](pg-node/README.md) for the full configuration and modes.
 
 ### .NET example
 
