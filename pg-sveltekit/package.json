@@ -17,7 +17,7 @@
 		"@eslint/compat": "^2.1.0",
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/kit": "^2.60.1",
+		"@sveltejs/kit": "^2.61.1",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@types/node": "^25.9.1",
 		"eslint": "^10.4.0",
@@ -25,16 +25,16 @@
 		"eslint-plugin-svelte": "^3.17.1",
 		"globals": "^17.6.0",
 		"prettier": "^3.8.3",
-		"prettier-plugin-svelte": "^4.0.0",
+		"prettier-plugin-svelte": "^4.0.1",
 		"svelte": "^5.55.9",
 		"svelte-check": "^4.4.8",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.59.4",
-		"vite": "^8.0.13",
+		"vite": "^8.0.14",
 		"vite-plugin-wasm": "^3.6.0"
 	},
 	"dependencies": {
-		"@e4a/pg-js": "^1.8.0"
+		"@e4a/pg-js": "^1.10.0"
 	},
 	"overrides": {
 		"cookie": "^0.7.2"
