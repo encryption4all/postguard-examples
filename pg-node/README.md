@@ -27,7 +27,7 @@ cp .env.example .env
 # edit .env: set at minimum PG_API_KEY
 ```
 
-The `package.json` depends on the published [`@e4a/pg-js`](https://www.npmjs.com/package/@e4a/pg-js) (currently `^1.9.0`).
+The `package.json` depends on the published [`@e4a/pg-js`](https://www.npmjs.com/package/@e4a/pg-js) (currently `^1.10.0`).
 
 ## Run
 
