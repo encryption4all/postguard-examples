@@ -4,11 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
 const dist = path.resolve(__dirname, 'dist')
-const webpackMode = 'development'
 
 module.exports = {
     name: 'examples',
-    mode: webpackMode,
     entry: {
         string: './examples/string.js',
         file: './examples/file.js',
