@@ -8,7 +8,7 @@ export const KeySorts = {
     Signing: 'sign/key',
 }
 
-export const PKG_URL = 'https://main.postguard.ihub.ru.nl/pkg'
+export const PKG_URL = 'https://pkg.staging.postguard.eu'
 
 export async function fetchKey(
     sort,
