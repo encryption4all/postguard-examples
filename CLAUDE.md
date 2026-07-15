@@ -1,5 +1,4 @@
-
----
+# CLAUDE.md
 
 ## Agent notes (migrated from the dobby memory repo)
 
@@ -17,7 +16,7 @@ Only a Conventional Commit PR-title check runs in CI; there's no build/test CI a
 
 ## Known issues / intentional non-fixes
 - `pg-manual/webpack.config.js` hardcodes `mode: 'development'` intentionally. This is an example app and does not need a production build; don't refile or propose a fix for the dev-only webpack mode.
-- `pg-node`'s `send` npm script passes a `--send` flag, but `index.mjs` only looks for `--upload-only`, so `--send` is silently ignored (known, unfixed).
+- `pg-node`'s `send` (and `start`) npm script passes no flag, so `index.mjs` defaults to send-email mode; only `upload` passes `--upload-only`. There is no `--send` flag.
 - Each sub-project has its own `.gitignore` (`pg-manual`'s was added later); the root `.gitignore` only covers `*.sln` and `.DS_Store`. When adding files to a subdir, stage explicit paths rather than `git add -A` if you're not sure a `.gitignore` exists there.
 
 ## pg-sveltekit build notes
