@@ -12,7 +12,21 @@ Example applications demonstrating PostGuard integration. No release automation;
 - `pg-manual/`: Webpack 5 + plain JS using `@e4a/pg-wasm` directly (low-level).
 
 ## CI / tests
-Only a Conventional Commit PR-title check runs in CI; there's no build/test CI and no test suite (example/reference code only). Code snippets in docs.postguard.eu are sourced from this repo, see postguard-docs' CLAUDE.md for the source-link conventions and the consolidation-commit gotcha.
+There is no test suite (example/reference code only). Code snippets in docs.postguard.eu are sourced from this repo, see postguard-docs' CLAUDE.md for the source-link conventions and the consolidation-commit gotcha.
+
+`.github/workflows/pr-title.yml` lints the PR title against Conventional Commits. Two build workflows (`ci.yml`, a PR gate that builds every sub-project from its lockfile, and `sdk-canary.yml`, a weekly build against the latest published SDKs that opens an issue on failure) were proposed as YAML in a PR comment rather than committed: the `dobby-coder` GitHub App has no `workflows` permission, so any push touching `.github/workflows/` is rejected by the remote with "refusing to allow a GitHub App to create or update workflow". Agents must deliver workflow changes here as a patch for a human to apply.
+
+Every sub-project builds reproducibly from a committed lockfile:
+
+| Sub-project | Install from lockfile | Then |
+| --- | --- | --- |
+| `pg-manual` | `npm ci` | `npm run build` |
+| `pg-node` | `npm ci` | `npm run check` |
+| `pg-sveltekit` | `npm ci` | `npm run build && npm run check && npm run lint` |
+| `pg-dotnet` | `dotnet restore --locked-mode` | `dotnet build --no-restore` |
+
+- `pg-node` has no bundler, so `npm run check` is its build equivalent: `node --check` on the CLI entry point plus an ESM import of `src/encryption.mjs`. The import is the part that matters: it resolves the named imports against the installed `@e4a/pg-js`, so a renamed or removed export fails the check. It does not catch signature-level changes behind an unchanged export name.
+- `pg-dotnet` restores with a lockfile (`packages.lock.json`, enabled by `RestorePackagesWithLockFile`). After changing any `PackageReference`, run `dotnet restore` and commit the regenerated `packages.lock.json` in the same commit, otherwise `--locked-mode` fails with `NU1004: the package reference ... has changed`.
 
 ## Known issues / intentional non-fixes
 - `pg-manual/webpack.config.js` hardcodes `mode: 'development'` intentionally. This is an example app and does not need a production build; don't refile or propose a fix for the dev-only webpack mode.
