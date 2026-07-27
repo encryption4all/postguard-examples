@@ -30,7 +30,8 @@
     "util": "^0.12.5"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --fail-on-warnings",
+    "check": "webpack --config check/webpack.config.js --fail-on-warnings",
     "dev": "npx webpack serve"
   },
   "overrides": {

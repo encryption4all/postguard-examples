@@ -12,7 +12,25 @@ Example applications demonstrating PostGuard integration. No release automation;
 - `pg-manual/`: Webpack 5 + plain JS using `@e4a/pg-wasm` directly (low-level).
 
 ## CI / tests
-Only a Conventional Commit PR-title check runs in CI; there's no build/test CI and no test suite (example/reference code only). Code snippets in docs.postguard.eu are sourced from this repo, see postguard-docs' CLAUDE.md for the source-link conventions and the consolidation-commit gotcha.
+There is no test suite (example/reference code only). Code snippets in docs.postguard.eu are sourced from this repo, see postguard-docs' CLAUDE.md for the source-link conventions and the consolidation-commit gotcha.
+
+`.github/workflows/pr-title.yml` lints the PR title against Conventional Commits.
+
+The `dobby-coder` GitHub App has no `workflows` permission, so any push touching `.github/workflows/` is rejected by the remote with "refusing to allow a GitHub App to create or update workflow". Agents must deliver workflow changes here as a patch for a human to apply.
+
+Every sub-project builds reproducibly from a committed lockfile:
+
+| Sub-project | Install from lockfile | Then |
+| --- | --- | --- |
+| `pg-manual` | `npm ci` | `npm run build && npm run check` |
+| `pg-node` | `npm ci` | `npm run check` |
+| `pg-sveltekit` | `npm ci` | `npm run build && npm run check && npm run lint` |
+| `pg-dotnet` | `dotnet restore --locked-mode` | `dotnet build --no-restore` |
+
+- `pg-node` has no bundler, so `npm run check` is its build equivalent: a `node --check` syntax pass over `index.mjs`, plus an ESM import of `src/encryption.mjs`. The import is the part that matters: it resolves `src/`'s named imports against the installed `@e4a/pg-js`, so a renamed or removed SDK export fails the check. Two things it does not cover. `index.mjs`'s own imports are never linked, because importing `index.mjs` would run the CLI, so renaming an export in `src/config.mjs` still passes the check and only fails at `node index.mjs`. And it says nothing about signature changes behind an unchanged export name.
+- `pg-manual`'s `build` script carries `--fail-on-warnings`. Webpack reports a missing *named* export on a static import as a warning and still exits 0, which is how the `web-streams-polyfill` rename recorded under "pg-manual build notes" below could have shipped green; the flag turns that class into a failed build. It does not catch the yivi breakage recorded there: `import * as Foo` is valid ESM whatever the module exports, so webpack compiles it with zero warnings and the failure is a runtime `TypeError: ... is not a constructor` at `new YiviCore(...)` in `examples/utils.js`. No build gate covers that class, and `check/sdk-exports.js` can't close it either, because the mistake is in this repo's own import form rather than in the SDK's export list; only running the example would catch it. The tree compiles with zero warnings today, so keep the flag rather than dropping it.
+- `pg-manual`'s `npm run check` is a second, tiny webpack build (`check/webpack.config.js`), also run with `--fail-on-warnings`. It covers the half the flag on `build` cannot reach: the examples get `@e4a/pg-wasm` through a *dynamic* `import()` and destructure at runtime, and webpack analyses no exports across that boundary, so dropping `seal` from the SDK leaves `npm run build` at exit 0 with zero warnings. `check/sdk-exports.js` imports the same names statically, which puts them back under the analysis. Adding a name means editing both the import and the object literal under it, because an unreferenced import is elided and probes nothing.
+- `pg-dotnet` restores with a lockfile (`packages.lock.json`, enabled by `RestorePackagesWithLockFile`). After changing any `PackageReference`, run `dotnet restore` and commit the regenerated `packages.lock.json` in the same commit, otherwise `--locked-mode` fails with `NU1004: the package reference ... has changed`.
 
 ## Known issues / intentional non-fixes
 - `pg-manual/webpack.config.js` hardcodes `mode: 'development'` intentionally. This is an example app and does not need a production build; don't refile or propose a fix for the dev-only webpack mode.
@@ -31,4 +49,4 @@ Only a Conventional Commit PR-title check runs in CI; there's no build/test CI a
 - `@privacybydesign/yivi-{core,client,popup}` 0.2 to 1.x changed module shape: v0.2 was CJS (`module.exports = class Foo`) and worked under `import * as Foo from '...'` via webpack's CJS interop; v1.0 ships proper ESM with named exports, so `import * as` no longer gives a callable constructor. Switch to `import { YiviCore } from '@privacybydesign/yivi-core'` (same for `YiviClient`/`YiviPopup`); `yivi-css` stays a bare side-effect import. The `yivi.use(...)` plugin contract is unchanged, expect the named-import migration to be the only code change on future yivi majors.
 - Bumping `webpack-dev-server` does NOT auto-refresh its already-locked transitive `ws` / `http-proxy-middleware` / `launch-editor` versions, even when the new wds's declared ranges already permit the CVE-fixed versions. After bumping `webpack-dev-server`, run `npm update ws http-proxy-middleware launch-editor` in `pg-manual` to pull the fixed versions in-range, then re-check `npm audit`. No `overrides` entry is needed for these three.
 - Dependency override: `overrides.uuid: ^11.1.1`. The chain is `uuid <- sockjs <- webpack-dev-server`; sockjs's latest still pins `uuid ^8.3.2` (GHSA-w5hq-g745-h8pq), so no in-range fix exists. Use 11.1.1, not 12+: uuid 12+ ships ESM-only (`type: module`), while sockjs `require()`s it; 11.1.1 is the newest patched line with a CJS `main`. Remove the override if sockjs ever bumps its uuid pin, or if webpack-dev-server drops sockjs. Scoped to `pg-manual/` only, the other example dirs don't pull uuid.
-- Build verification: `npm install && npm run build` must be a clean compile with zero "export ... was not found" warnings.
+- Build verification: `npm install && npm run build && npm run check` must be a clean compile with zero "export ... was not found" warnings.
