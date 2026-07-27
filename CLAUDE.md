@@ -18,8 +18,6 @@ There is no test suite (example/reference code only). Code snippets in docs.post
 
 The `dobby-coder` GitHub App has no `workflows` permission, so any push touching `.github/workflows/` is rejected by the remote with "refusing to allow a GitHub App to create or update workflow". Agents must deliver workflow changes here as a patch for a human to apply.
 
-Pending, remove this paragraph once it lands: two build workflows are written but not committed, for that reason. `ci.yml` is a PR gate that builds every sub-project from its lockfile; `sdk-canary.yml` is a weekly build against the latest published SDKs that opens an issue on failure. The YAML is in a comment on [#66](https://github.com/encryption4all/postguard-examples/pull/66).
-
 Every sub-project builds reproducibly from a committed lockfile:
 
 | Sub-project | Install from lockfile | Then |
