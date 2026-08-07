@@ -2,6 +2,10 @@
 
 > For full documentation, visit [docs.postguard.eu](https://docs.postguard.eu).
 
+> [!IMPORTANT]
+> **Development moved to [encryption4all/postguard-js](https://github.com/encryption4all/postguard-js), under `examples/`.**
+> This repository is kept for history and is about to be archived.
+
 Example applications demonstrating PostGuard integration. Contains reference implementations for developers building on PostGuard. Code snippets in docs.postguard.eu come from this repo.
 
 There are four sub-projects:
